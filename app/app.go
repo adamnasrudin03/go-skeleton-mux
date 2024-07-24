@@ -25,6 +25,6 @@ func WiringService(repo *repository.Repositories, cfg *configs.Configs, logger *
 
 func WiringController(srv *service.Services, cfg *configs.Configs, logger *logrus.Logger, validator *validator.Validate) *controller.Controllers {
 	return &controller.Controllers{
-		TeamMember: controller.NewTeamMemberDelivery(srv.TeamMember, logger, validator),
+		TeamMember: controller.NewTeamMemberDelivery(srv.TeamMember, cfg, logger, validator),
 	}
 }

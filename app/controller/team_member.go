@@ -8,7 +8,9 @@ import (
 
 	help "github.com/adamnasrudin03/go-helpers"
 	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
+	"github.com/adamnasrudin03/go-skeleton-mux/app/configs"
 	"github.com/adamnasrudin03/go-skeleton-mux/app/dto"
+	"github.com/adamnasrudin03/go-skeleton-mux/app/middlewares"
 	"github.com/adamnasrudin03/go-skeleton-mux/app/service"
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
@@ -26,26 +28,29 @@ type TeamMemberController interface {
 
 type TeamMemberHandler struct {
 	Service  service.TeamMemberService
+	Cfg      *configs.Configs
 	Logger   *logrus.Logger
 	Validate *validator.Validate
 }
 
 func NewTeamMemberDelivery(
 	srv service.TeamMemberService,
+	cfg *configs.Configs,
 	logger *logrus.Logger,
 	validator *validator.Validate,
 ) TeamMemberController {
 	return &TeamMemberHandler{
 		Service:  srv,
+		Cfg:      cfg,
 		Logger:   logger,
 		Validate: validator,
 	}
 }
 
 func (c *TeamMemberHandler) Mount(r *mux.Router) {
-	r.HandleFunc("/", c.Create).Methods("POST")
-	r.HandleFunc("/{id}", c.Delete).Methods("DELETE")
-	r.HandleFunc("/{id}", c.Update).Methods("PUT")
+	r.HandleFunc("/", middlewares.SetAuthBasic(c.Create, c.Cfg.App.BasicUsername, c.Cfg.App.BasicPassword)).Methods("POST")
+	r.HandleFunc("/{id}", middlewares.SetAuthBasic(c.Delete, c.Cfg.App.BasicUsername, c.Cfg.App.BasicPassword)).Methods("DELETE")
+	r.HandleFunc("/{id}", middlewares.SetAuthBasic(c.Update, c.Cfg.App.BasicUsername, c.Cfg.App.BasicPassword)).Methods("PUT")
 	r.HandleFunc("/", c.GetList).Methods("GET")
 	r.HandleFunc("/{id}", c.GetDetail).Methods("GET")
 }
