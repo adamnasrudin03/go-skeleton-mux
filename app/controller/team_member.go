@@ -48,10 +48,10 @@ func NewTeamMemberDelivery(
 }
 
 func (c *TeamMemberHandler) Mount(r *mux.Router) {
-	r.HandleFunc("/", middlewares.SetAuthBasic(c.Create, c.Cfg.App.BasicUsername, c.Cfg.App.BasicPassword)).Methods("POST")
+	r.HandleFunc("", middlewares.SetAuthBasic(c.Create, c.Cfg.App.BasicUsername, c.Cfg.App.BasicPassword)).Methods("POST")
 	r.HandleFunc("/{id}", middlewares.SetAuthBasic(c.Delete, c.Cfg.App.BasicUsername, c.Cfg.App.BasicPassword)).Methods("DELETE")
 	r.HandleFunc("/{id}", middlewares.SetAuthBasic(c.Update, c.Cfg.App.BasicUsername, c.Cfg.App.BasicPassword)).Methods("PUT")
-	r.HandleFunc("/", c.GetList).Methods("GET")
+	r.HandleFunc("", c.GetList).Methods("GET")
 	r.HandleFunc("/{id}", c.GetDetail).Methods("GET")
 }
 
