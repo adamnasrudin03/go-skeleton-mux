@@ -21,10 +21,10 @@ func NewRoutes(h controller.Controllers) routes {
 	}
 
 	r.HttpServer.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		response_mapper.RenderJSON(w, http.StatusOK, response_mapper.NewResponseMultiLang(response_mapper.MultiLanguages{
+		response_mapper.RenderJSON(w, http.StatusOK, response_mapper.MultiLanguages{
 			ID: "selamat datang di server ini",
 			EN: "Welcome this server",
-		}))
+		})
 	}).Methods("GET")
 
 	r.HttpServer.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
